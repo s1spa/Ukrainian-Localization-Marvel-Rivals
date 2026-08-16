@@ -18,3 +18,5 @@ __pycache__/
 to_translate_fixes.json
 translated_fixes.json
 _unused_merge_output.json
+
+.env
