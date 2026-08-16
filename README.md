@@ -1,5 +1,10 @@
 # Marvel Rivals - Українізатор
 
+![Version](https://img.shields.io/badge/version-0.6-blue)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
+
 Неофіційний переклад тексту Marvel Rivals на українську мову. Повністю перекладено основний UI, меню, здібності героїв, магазин, події, бойовий пропуск тощо (~60 700 рядків локалізації).
 
 ## Статус
