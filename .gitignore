@@ -1,0 +1,20 @@
+# Build artifacts (regenerated from Game_uk_merged_v2.json via the pipeline in README.md)
+Game_full_translated.csv
+Game_uk_v*.locres
+*.pak
+ModStaging/
+old/
+
+# Third-party tools (download separately, see README.md)
+Repacker/
+blop/
+UnrealLocres.exe
+
+# Python
+__pycache__/
+*.pyc
+
+# Intermediate/leftover translation pipeline files
+to_translate_fixes.json
+translated_fixes.json
+_unused_merge_output.json
