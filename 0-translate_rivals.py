@@ -5,6 +5,7 @@ merges with uk_existing.json (already-translated strings from the old KUBIK mod)
 and writes the final merged JSON ready for CSV/.locres conversion.
 """
 import os
+import sys
 import json
 import re
 import threading
@@ -267,8 +268,11 @@ class KeyPool:
 
     def print_usage(self):
         for i, t in enumerate(self._translators):
-            u = t.get_usage()
-            print(f"  Key #{i + 1}: {u.character.count:,} / {u.character.limit:,} chars")
+            try:
+                u = t.get_usage()
+                print(f"  Key #{i + 1}: {u.character.count:,} / {u.character.limit:,} chars")
+            except Exception as e:
+                print(f"  Key #{i + 1}: unavailable ({e})")
 
 
 def translate_batch(batch_keys, batch_texts, fallback, original_texts, original_map, pool, failed_keys):
@@ -419,4 +423,12 @@ def main():
 
 
 if __name__ == "__main__":
+    # Usage: python 0-translate_rivals.py [to_translate.json] [Game_uk_merged_v2.json] [output.json]
+    # All arguments are optional - omit any of them to keep the default path set above.
+    if len(sys.argv) > 1:
+        TO_TRANSLATE_PATH = Path(sys.argv[1])
+    if len(sys.argv) > 2:
+        EXISTING_UK_PATH = Path(sys.argv[2])
+    if len(sys.argv) > 3:
+        MERGED_OUTPUT_PATH = Path(sys.argv[3])
     main()
