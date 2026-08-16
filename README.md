@@ -19,7 +19,7 @@
 Пайплайн:
 
 1. **Екстракція оригіналу** - через [FModel](https://fmodel.app/) з режимом завантаження **"All"** (обов'язково - окремий `pakchunkLocres-Windows.pak` застарілий і неповний, актуальний текст розкиданий по всіх архівах гри). Експортується `Game.locres` (сирий бінарник) і `Game.json` (той самий вміст у зручному JSON, namespace -> key -> текст).
-2. **Переклад** - `0-translate_rivals.py`: перекладає відсутні/нові ключі через Gemini API (`gemini-flash-lite-latest` - вищий безкоштовний ліміт запитів/день, ніж у звичайного flash) з фолбеком на DeepL/Google Translate, з захистом плейсхолдерів (`{Name}`) і UE-richtext тегів (`<Tag>...</>`, включно з атрибутами типу `id="..."`). Результат мерджиться в `Game_uk_merged_v2.json`.
+2. **Переклад** - `scripts/0-translate_rivals.py`: перекладає відсутні/нові ключі через Gemini API (`gemini-flash-lite-latest` - вищий безкоштовний ліміт запитів/день, ніж у звичайного flash) з фолбеком на DeepL/Google Translate, з захистом плейсхолдерів (`{Name}`) і UE-richtext тегів (`<Tag>...</>`, включно з атрибутами типу `id="..."`). Результат мерджиться в `Game_uk_merged_v2.json`.
 3. **Ручна вичитка** - велика частина якості перекладу - це вручну знайдені й виправлені помилки машинного перекладу (неправильний контекст, задовгий текст, що вилазить за межі UI, тощо). Список конкретних правок - у [`CHANGELOG.md`](CHANGELOG.md).
 4. **Збірка `.locres`** - конвертація `Game_uk_merged_v2.json` у CSV (`key,source,target`, роздільник ключа `namespace/key`) і виклик [`UnrealLocres.exe`](https://github.com/akintos/UnrealLocres) (`import` режим - патчить оригінальний `Game.locres`, зберігаючи всі внутрішні метадані, замість генерації файлу з нуля).
 5. **Пакування** - `repak_cli` (з набору [repak-rivals](https://github.com/natimerry/repak-rivals)) пакує `Game.locres` **разом з недоторканим оригінальним `Game.json`** (обов'язкова умова - без нього щось у грі ламається, причина невідома) у legacy-формат `.pak` (НЕ IoStore - `pakchunkLocres` в оригіналі теж legacy).
@@ -35,14 +35,17 @@
 ## Структура репозиторію
 
 ```
-Game.json               - оригінальний англійський текст (namespace -> key -> текст), НЕ чіпати
-Game.locres             - оригінальний англійський .locres (бінарник), база для патчингу
-Game_uk_merged_v2.json  - переклад (джерело істини), редагувати тут
-0-mergeloc.py           - мержить старий CSV-переклад з новим Game.json (у разі виходу нової версії гри з новими ключами)
-0-translate_rivals.py   - авто-переклад відсутніх ключів через Gemini або DeepL
-0-Fill_translation.py   - допоміжний скрипт заповнення CSV з JSON
-0-bruh.py               - фільтр CSV (залишає тільки латиницю/кирилицю, ще з ранньої стадії роботи з сирим UEExtractor-дампом)
+Game.json                      - оригінальний англійський текст (namespace -> key -> текст), НЕ чіпати
+Game.locres                    - оригінальний англійський .locres (бінарник), база для патчингу
+Game_uk_merged_v2.json         - переклад (джерело істини), редагувати тут
+scripts/0-mergeloc.py          - мержить старий CSV/JSON-переклад з новим Game.json (у разі виходу нової версії гри з новими ключами)
+scripts/0-translate_rivals.py  - авто-переклад відсутніх ключів через DeepL/Gemini/Google Translate
+scripts/0-build_csv.py         - конвертує Game_uk_merged_v2.json у CSV для UnrealLocres.exe import
+scripts/0-Fill_translation.py  - допоміжний скрипт заповнення CSV з JSON
+scripts/0-bruh.py              - фільтр CSV (залишає тільки латиницю/кирилицю, ще з ранньої стадії роботи з сирим UEExtractor-дампом)
 ```
+
+Усі скрипти запускаються з кореня репозиторію, наприклад: `python scripts/0-translate_rivals.py`.
 
 Не в репозиторії (застосунки сторонніх авторів, качати окремо):
 - [FModel](https://fmodel.app/) - екстракція `Game.locres`/`Game.json` з гри

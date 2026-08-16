@@ -20,7 +20,7 @@ from google.genai import types as genai_types
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path.cwd()  # run this from the repo root (where Game.json etc. live), not from scripts/
 TO_TRANSLATE_PATH = BASE_DIR / "to_translate.json"
 EXISTING_UK_PATH = BASE_DIR / "uk_existing.json"
 OUTPUT_PATH = BASE_DIR / "translated_uk.json"          # newly translated only (resumable cache)
