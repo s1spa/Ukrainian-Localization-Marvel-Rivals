@@ -1,6 +1,6 @@
 # Marvel Rivals - Українізатор
 
-![Version](https://img.shields.io/badge/version-0.6-blue)
+![Version](https://img.shields.io/badge/version-0.7-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
